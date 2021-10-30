@@ -1,27 +1,172 @@
 package com.github.giulioscattolin.satellite;
 
 import static com.github.giulioscattolin.satellite.Constant.OMEGA_E_DOT;
+import static java.lang.Double.NaN;
 import static java.lang.Math.*;
 
 public class QuasiKeplerianSatellitePositionModel {
-    public double itsCrs;
-    public double itsDeltaN;
-    public double itsM0;
-    public double itsCuc;
-    public double itsE;
-    public double itsCus;
-    public double itsSqrtA;
-    public double itsCic;
-    public double itsOmega0;
-    public double itsCis;
-    public double itsI0;
-    public double itsCrc;
-    public double itsOmega;
-    public double itsOmegaDot;
-    public double itsIDot;
-    public double itsMu;
-    public double itsToeInSecondsSinceTheBeginningOfTheWeek;
-    public double itsSecondsSinceTheBeginningOfTheWeek;
+    private double itsCrs;
+    private double itsDeltaN;
+    private double itsM0;
+    private double itsCuc;
+    private double itsE;
+    private double itsCus;
+    private double itsSqrtA;
+    private double itsCic;
+    private double itsOmega0;
+    private double itsCis;
+    private double itsI0;
+    private double itsCrc;
+    private double itsOmega;
+    private double itsOmegaDot;
+    private double itsIDot;
+    private double itsMu = NaN;
+    private double itsToeInSecondsSinceTheBeginningOfTheWeek;
+    private double itsSecondsSinceTheBeginningOfTheWeek;
+
+    public double getCrs() {
+        return itsCrs;
+    }
+
+    public void setCrs(double newCrs) {
+        itsCrs = newCrs;
+    }
+
+    public double getDeltaN() {
+        return itsDeltaN;
+    }
+
+    public void setDeltaN(double newDeltaN) {
+        itsDeltaN = newDeltaN;
+    }
+
+    public double getM0() {
+        return itsM0;
+    }
+
+    public void setM0(double newM0) {
+        itsM0 = newM0;
+    }
+
+    public double getCuc() {
+        return itsCuc;
+    }
+
+    public void setCuc(double newCuc) {
+        itsCuc = newCuc;
+    }
+
+    public double getE() {
+        return itsE;
+    }
+
+    public void setE(double newE) {
+        itsE = newE;
+    }
+
+    public double getCus() {
+        return itsCus;
+    }
+
+    public void setCus(double newCus) {
+        itsCus = newCus;
+    }
+
+    public double getSqrtA() {
+        return itsSqrtA;
+    }
+
+    public void setSqrtA(double newSqrtA) {
+        itsSqrtA = newSqrtA;
+    }
+
+    public double getCic() {
+        return itsCic;
+    }
+
+    public void setCic(double newCic) {
+        itsCic = newCic;
+    }
+
+    public double getOmega0() {
+        return itsOmega0;
+    }
+
+    public void setOmega0(double newOmega0) {
+        itsOmega0 = newOmega0;
+    }
+
+    public double getCis() {
+        return itsCis;
+    }
+
+    public void setCis(double newCis) {
+        itsCis = newCis;
+    }
+
+    public double getI0() {
+        return itsI0;
+    }
+
+    public void setI0(double newI0) {
+        itsI0 = newI0;
+    }
+
+    public double getCrc() {
+        return itsCrc;
+    }
+
+    public void setCrc(double newCrc) {
+        itsCrc = newCrc;
+    }
+
+    public double getOmega() {
+        return itsOmega;
+    }
+
+    public void setOmega(double newOmega) {
+        itsOmega = newOmega;
+    }
+
+    public double getOmegaDot() {
+        return itsOmegaDot;
+    }
+
+    public void setOmegaDot(double newOmegaDot) {
+        itsOmegaDot = newOmegaDot;
+    }
+
+    public double getIDot() {
+        return itsIDot;
+    }
+
+    public void setIDot(double newIDot) {
+        itsIDot = newIDot;
+    }
+
+    public double getMu() {
+        return itsMu;
+    }
+
+    public void setMu(double newMu) {
+        itsMu = newMu;
+    }
+
+    public double getToeInSecondsSinceTheBeginningOfTheWeek() {
+        return itsToeInSecondsSinceTheBeginningOfTheWeek;
+    }
+
+    public void setToeInSecondsSinceTheBeginningOfTheWeek(double newToeInSecondsSinceTheBeginningOfTheWeek) {
+        itsToeInSecondsSinceTheBeginningOfTheWeek = newToeInSecondsSinceTheBeginningOfTheWeek;
+    }
+
+    public double getSecondsSinceTheBeginningOfTheWeek() {
+        return itsSecondsSinceTheBeginningOfTheWeek;
+    }
+
+    public void setSecondsSinceTheBeginningOfTheWeek(double newSecondsSinceTheBeginningOfTheWeek) {
+        itsSecondsSinceTheBeginningOfTheWeek = newSecondsSinceTheBeginningOfTheWeek;
+    }
 
     public double[] getPosition() {
         return new Algorithm().position;

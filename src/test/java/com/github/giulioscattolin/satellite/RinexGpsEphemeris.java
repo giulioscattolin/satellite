@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public class RinexGpsEphemeris extends RinexQuasiKeplerianEphemeris {
     public RinexGpsEphemeris(String ephemeris) {
         super(ephemeris);
-        itsPositionModel.itsMu = 3.986005E14;
+        itsPositionModel.setMu(3.986005E14);
         itsTolerance = 1E-3;
     }
 

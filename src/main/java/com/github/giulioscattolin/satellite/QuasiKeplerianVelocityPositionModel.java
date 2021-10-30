@@ -1,7 +1,11 @@
 package com.github.giulioscattolin.satellite;
 
 public class QuasiKeplerianVelocityPositionModel {
-    public QuasiKeplerianSatellitePositionModel itsPositionModel;
+    private QuasiKeplerianSatellitePositionModel itsPositionModel;
+
+    public void setPositionModel(QuasiKeplerianSatellitePositionModel itsPositionModel) {
+        this.itsPositionModel = itsPositionModel;
+    }
 
     public double[] getVelocityAt(double secondsSinceReferenceEpoch) {
         return new Algorithm(secondsSinceReferenceEpoch).velocity;
@@ -12,9 +16,9 @@ public class QuasiKeplerianVelocityPositionModel {
 
         Algorithm(double secondsSinceTheBeginningOfTheWeek) {
             double dt = 1E-4;
-            itsPositionModel.itsSecondsSinceTheBeginningOfTheWeek = secondsSinceTheBeginningOfTheWeek;
+            itsPositionModel.setSecondsSinceTheBeginningOfTheWeek(secondsSinceTheBeginningOfTheWeek);
             double[] p = itsPositionModel.getPosition();
-            itsPositionModel.itsSecondsSinceTheBeginningOfTheWeek += dt;
+            itsPositionModel.setSecondsSinceTheBeginningOfTheWeek(secondsSinceTheBeginningOfTheWeek + dt);
             double[] q = itsPositionModel.getPosition();
             double xk = (q[0] - p[0]) / dt;
             double yk = (q[1] - p[1]) / dt;

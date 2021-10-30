@@ -1,6 +1,5 @@
 package com.github.giulioscattolin.satellite;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -22,8 +21,7 @@ public abstract class RinexQuasiKeplerianEphemeris {
 
     public RinexQuasiKeplerianEphemeris(String ephemeris) {
         readLines(ephemeris.split("\n"));
-        itsPositionModel.itsMu = 3.986005E14;
-        itsVelocityModel.itsPositionModel = itsPositionModel;
+        itsVelocityModel.setPositionModel(itsPositionModel);
     }
 
     private static double parseDouble(String field) {
@@ -38,7 +36,7 @@ public abstract class RinexQuasiKeplerianEphemeris {
         readBroadcastOrbit4(lines[4]);
         readBroadcastOrbit5(lines[5]);
         itsReferenceEpoch = getReferenceEpoch();
-        itsPolynomialCorrection.itsTocInSecondsSinceTheBeginningOfTheWeek = getTocInSecondsSinceTheBeginningOfTheWeek();
+        setTocInSecondsSinceTheBeginningOfTheWeek();
     }
 
     private LocalDateTime getReferenceEpoch() {
@@ -47,9 +45,9 @@ public abstract class RinexQuasiKeplerianEphemeris {
 
     protected abstract LocalDateTime getEpoch();
 
-    private double getTocInSecondsSinceTheBeginningOfTheWeek() {
+    private void setTocInSecondsSinceTheBeginningOfTheWeek() {
         LocalDateTime toc = LocalDateTime.of(itsYear, itsMonth, itsDay, itsHour, itsMinute, itsSecond);
-        return itsReferenceEpoch.until(toc, ChronoUnit.SECONDS);
+        itsPolynomialCorrection.setTocInSecondsSinceTheBeginningOfTheWeek(itsReferenceEpoch.until(toc, ChronoUnit.SECONDS));
     }
 
     private void readSvEpochSvClk(String line) {
@@ -59,40 +57,40 @@ public abstract class RinexQuasiKeplerianEphemeris {
         itsHour = parseInt(line.substring(15, 17));
         itsMinute = parseInt(line.substring(18, 20));
         itsSecond = parseInt(line.substring(21, 23));
-        itsPolynomialCorrection.itsClockBias = parseDouble(line.substring(23, 42));
-        itsPolynomialCorrection.itsClockDrift = parseDouble(line.substring(42, 61));
-        itsPolynomialCorrection.itsClockDriftRate = parseDouble(line.substring(61, 80));
+        itsPolynomialCorrection.setClockBias(parseDouble(line.substring(23, 42)));
+        itsPolynomialCorrection.setClockDrift(parseDouble(line.substring(42, 61)));
+        itsPolynomialCorrection.setClockDriftRate(parseDouble(line.substring(61, 80)));
     }
 
     private void readBroadcastOrbit1(String line) {
-        itsPositionModel.itsCrs = parseDouble(line.substring(23, 42));
-        itsPositionModel.itsDeltaN = parseDouble(line.substring(42, 61));
-        itsPositionModel.itsM0 = parseDouble(line.substring(61, 80));
+        itsPositionModel.setCrs(parseDouble(line.substring(23, 42)));
+        itsPositionModel.setDeltaN(parseDouble(line.substring(42, 61)));
+        itsPositionModel.setM0(parseDouble(line.substring(61, 80)));
     }
 
     private void readBroadcastOrbit2(String line) {
-        itsPositionModel.itsCuc = parseDouble(line.substring(4, 23));
-        itsPositionModel.itsE = parseDouble(line.substring(23, 42));
-        itsPositionModel.itsCus = parseDouble(line.substring(42, 61));
-        itsPositionModel.itsSqrtA = parseDouble(line.substring(61, 80));
+        itsPositionModel.setCuc(parseDouble(line.substring(4, 23)));
+        itsPositionModel.setE(parseDouble(line.substring(23, 42)));
+        itsPositionModel.setCus(parseDouble(line.substring(42, 61)));
+        itsPositionModel.setSqrtA(parseDouble(line.substring(61, 80)));
     }
 
     private void readBroadcastOrbit3(String line) {
-        itsPositionModel.itsToeInSecondsSinceTheBeginningOfTheWeek = parseDouble(line.substring(4, 23));
-        itsPositionModel.itsCic = parseDouble(line.substring(23, 42));
-        itsPositionModel.itsOmega0 = parseDouble(line.substring(42, 61));
-        itsPositionModel.itsCis = parseDouble(line.substring(61, 80));
+        itsPositionModel.setToeInSecondsSinceTheBeginningOfTheWeek(parseDouble(line.substring(4, 23)));
+        itsPositionModel.setCic(parseDouble(line.substring(23, 42)));
+        itsPositionModel.setOmega0(parseDouble(line.substring(42, 61)));
+        itsPositionModel.setCis(parseDouble(line.substring(61, 80)));
     }
 
     private void readBroadcastOrbit4(String line) {
-        itsPositionModel.itsI0 = parseDouble(line.substring(4, 23));
-        itsPositionModel.itsCrc = parseDouble(line.substring(23, 42));
-        itsPositionModel.itsOmega = parseDouble(line.substring(42, 61));
-        itsPositionModel.itsOmegaDot = parseDouble(line.substring(61, 80));
+        itsPositionModel.setI0(parseDouble(line.substring(4, 23)));
+        itsPositionModel.setCrc(parseDouble(line.substring(23, 42)));
+        itsPositionModel.setOmega(parseDouble(line.substring(42, 61)));
+        itsPositionModel.setOmegaDot(parseDouble(line.substring(61, 80)));
     }
 
     private void readBroadcastOrbit5(String line) {
-        itsPositionModel.itsIDot = parseDouble(line.substring(4, 23));
+        itsPositionModel.setIDot(parseDouble(line.substring(4, 23)));
         itsWeekNumber = (long) parseDouble(line.substring(42, 61));
     }
 }

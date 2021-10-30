@@ -192,7 +192,7 @@ public class QuasiKeplerianSatelliteModelTest {
     }
 
     private double[] getPosition(int year, int dayOfYear, int secondsOfDay) {
-        itsQuasiKeplerianEphemeris.itsPositionModel.itsSecondsSinceTheBeginningOfTheWeek = getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay);
+        itsQuasiKeplerianEphemeris.itsPositionModel.setSecondsSinceTheBeginningOfTheWeek( getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
         return itsQuasiKeplerianEphemeris.itsPositionModel.getPosition();
     }
 
