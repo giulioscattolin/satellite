@@ -1,11 +1,13 @@
 package com.github.giulioscattolin.satellite;
 
+import static java.lang.Double.NaN;
+
 public class PolynomialSatelliteClockCorrection {
-    private double itsClockBias;
-    private double itsClockDrift;
-    private double itsClockDriftRate;
-    private double itsTocInSecondsSinceTheBeginningOfTheWeek;
-    private double itsSecondsSinceTheBeginningOfTheWeek;
+    private double itsClockBias = NaN;
+    private double itsClockDrift = NaN;
+    private double itsClockDriftRate = NaN;
+    private double itsTocInSecondsSinceTheBeginningOfTheWeek = NaN;
+    private double itsSecondsSinceTheBeginningOfTheWeek = NaN;
 
     public double getSecondsSinceTheBeginningOfTheWeek() {
         return itsSecondsSinceTheBeginningOfTheWeek;

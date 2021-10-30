@@ -1,8 +1,10 @@
 package com.github.giulioscattolin.satellite;
 
+import static java.lang.Double.NaN;
+
 public class QuasiKeplerianVelocityPositionModel {
     private QuasiKeplerianSatellitePositionModel itsPositionModel;
-    private double itsSecondsSinceTheBeginningOfTheWeek;
+    private double itsSecondsSinceTheBeginningOfTheWeek = NaN;
 
     public void setPositionModel(QuasiKeplerianSatellitePositionModel itsPositionModel) {
         this.itsPositionModel = itsPositionModel;

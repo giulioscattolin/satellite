@@ -5,24 +5,24 @@ import static java.lang.Double.NaN;
 import static java.lang.Math.*;
 
 public class QuasiKeplerianSatellitePositionModel {
-    private double itsCrs;
-    private double itsDeltaN;
-    private double itsM0;
-    private double itsCuc;
-    private double itsE;
-    private double itsCus;
-    private double itsSqrtA;
-    private double itsCic;
-    private double itsOmega0;
-    private double itsCis;
-    private double itsI0;
-    private double itsCrc;
-    private double itsOmega;
-    private double itsOmegaDot;
-    private double itsIDot;
+    private double itsCrs = NaN;
+    private double itsDeltaN = NaN;
+    private double itsM0 = NaN;
+    private double itsCuc = NaN;
+    private double itsE = NaN;
+    private double itsCus = NaN;
+    private double itsSqrtA = NaN;
+    private double itsCic = NaN;
+    private double itsOmega0 = NaN;
+    private double itsCis = NaN;
+    private double itsI0 = NaN;
+    private double itsCrc = NaN;
+    private double itsOmega = NaN;
+    private double itsOmegaDot = NaN;
+    private double itsIDot = NaN;
     private double itsMu = NaN;
-    private double itsToeInSecondsSinceTheBeginningOfTheWeek;
-    private double itsSecondsSinceTheBeginningOfTheWeek;
+    private double itsToeInSecondsSinceTheBeginningOfTheWeek = NaN;
+    private double itsSecondsSinceTheBeginningOfTheWeek = NaN;
 
     public double getCrs() {
         return itsCrs;
