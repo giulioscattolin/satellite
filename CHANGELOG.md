@@ -1,3 +1,10 @@
+# [1.0.0-alpha.2](https://github.com/giulioscattolin/satellite/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2021-10-30)
+
+
+### Features
+
+* implement SatelliteClockCorrection facade ([ad3405b](https://github.com/giulioscattolin/satellite/commit/ad3405b69dfe9ecab5d05cf70ce43ce6c0470371))
+
 # 1.0.0-alpha.1 (2021-10-30)
 
 
