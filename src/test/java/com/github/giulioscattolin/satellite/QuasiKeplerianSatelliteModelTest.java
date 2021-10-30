@@ -182,7 +182,7 @@ public class QuasiKeplerianSatelliteModelTest {
         setSecondsSinceTheBeginningOfTheWeek(year, dayOfYear, secondsOfDay);
         double[] position = itsEphemeris.itsPositionModel.getPosition();
         double[] velocity = itsEphemeris.itsVelocityModel.getVelocity();
-        double correctionInSeconds = itsEphemeris.itsPolynomialCorrection.getCorrectionInSeconds();
+        double correctionInSeconds = itsEphemeris.itsPolynomialCorrectionModel.getSeconds();
         assertThat(position[0]).isWithin(itsEphemeris.itsTolerance).of(positionX);
         assertThat(position[1]).isWithin(itsEphemeris.itsTolerance).of(positionY);
         assertThat(position[2]).isWithin(itsEphemeris.itsTolerance).of(positionZ);
@@ -199,7 +199,7 @@ public class QuasiKeplerianSatelliteModelTest {
         double secondsSinceTheBeginningOfTheWeek = itsEphemeris.itsReferenceEpoch.until(time, ChronoUnit.SECONDS);
         itsEphemeris.itsPositionModel.setSecondsSinceTheBeginningOfTheWeek(secondsSinceTheBeginningOfTheWeek);
         itsEphemeris.itsVelocityModel.setSecondsSinceTheBeginningOfTheWeek(secondsSinceTheBeginningOfTheWeek);
-        itsEphemeris.itsPolynomialCorrection.setSecondsSinceTheBeginningOfTheWeek(secondsSinceTheBeginningOfTheWeek);
+        itsEphemeris.itsPolynomialCorrectionModel.setSecondsSinceTheBeginningOfTheWeek(secondsSinceTheBeginningOfTheWeek);
     }
 
     @Before

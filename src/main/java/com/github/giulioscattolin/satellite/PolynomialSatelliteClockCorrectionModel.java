@@ -2,7 +2,7 @@ package com.github.giulioscattolin.satellite;
 
 import static java.lang.Double.NaN;
 
-public class PolynomialSatelliteClockCorrection {
+public class PolynomialSatelliteClockCorrectionModel {
     private double itsClockBias = NaN;
     private double itsClockDrift = NaN;
     private double itsClockDriftRate = NaN;
@@ -49,7 +49,7 @@ public class PolynomialSatelliteClockCorrection {
         this.itsTocInSecondsSinceTheBeginningOfTheWeek = itsTocInSecondsSinceTheBeginningOfTheWeek;
     }
 
-    public double getCorrectionInSeconds() {
+    public double getSeconds() {
         double dt = itsSecondsSinceTheBeginningOfTheWeek - itsTocInSecondsSinceTheBeginningOfTheWeek;
         if (dt > 302400)
             dt -= 604800;

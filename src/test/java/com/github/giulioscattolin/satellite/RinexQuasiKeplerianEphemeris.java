@@ -8,7 +8,7 @@ import static java.lang.Integer.parseInt;
 public abstract class RinexQuasiKeplerianEphemeris {
     public QuasiKeplerianSatellitePositionModel itsPositionModel = new QuasiKeplerianSatellitePositionModel();
     public QuasiKeplerianSatelliteVelocityModel itsVelocityModel = new QuasiKeplerianSatelliteVelocityModel();
-    public PolynomialSatelliteClockCorrection itsPolynomialCorrection = new PolynomialSatelliteClockCorrection();
+    public PolynomialSatelliteClockCorrectionModel itsPolynomialCorrectionModel = new PolynomialSatelliteClockCorrectionModel();
     public LocalDateTime itsReferenceEpoch;
     public double itsTolerance;
     private long itsWeekNumber;
@@ -47,7 +47,7 @@ public abstract class RinexQuasiKeplerianEphemeris {
 
     private void setTocInSecondsSinceTheBeginningOfTheWeek() {
         LocalDateTime toc = LocalDateTime.of(itsYear, itsMonth, itsDay, itsHour, itsMinute, itsSecond);
-        itsPolynomialCorrection.setTocInSecondsSinceTheBeginningOfTheWeek(itsReferenceEpoch.until(toc, ChronoUnit.SECONDS));
+        itsPolynomialCorrectionModel.setTocInSecondsSinceTheBeginningOfTheWeek(itsReferenceEpoch.until(toc, ChronoUnit.SECONDS));
     }
 
     private void readSvEpochSvClk(String line) {
@@ -57,9 +57,9 @@ public abstract class RinexQuasiKeplerianEphemeris {
         itsHour = parseInt(line.substring(15, 17));
         itsMinute = parseInt(line.substring(18, 20));
         itsSecond = parseInt(line.substring(21, 23));
-        itsPolynomialCorrection.setClockBias(parseDouble(line.substring(23, 42)));
-        itsPolynomialCorrection.setClockDrift(parseDouble(line.substring(42, 61)));
-        itsPolynomialCorrection.setClockDriftRate(parseDouble(line.substring(61, 80)));
+        itsPolynomialCorrectionModel.setClockBias(parseDouble(line.substring(23, 42)));
+        itsPolynomialCorrectionModel.setClockDrift(parseDouble(line.substring(42, 61)));
+        itsPolynomialCorrectionModel.setClockDriftRate(parseDouble(line.substring(61, 80)));
     }
 
     private void readBroadcastOrbit1(String line) {
