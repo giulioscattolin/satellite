@@ -11,8 +11,7 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
 public class QuasiKeplerianSatelliteModelTest {
-    private RinexEphemerisReader.RinexQuasiKeplerianEphemeris itsGpsEphemeris;
-    private RinexEphemerisReader.RinexQuasiKeplerianEphemeris itsGalileoEphemeris;
+    private RinexEphemerisReader.RinexQuasiKeplerianEphemeris itsQuasiKeplerianEphemeris;
 
     @Test
     public void verifyGpsSatelliteModel() {
@@ -113,11 +112,11 @@ public class QuasiKeplerianSatelliteModelTest {
     }
 
     private void givenGpsEphemeris(String ephemeris) {
-        itsGpsEphemeris = new RinexEphemerisReader.GpsEphemeris(ephemeris);
+        itsQuasiKeplerianEphemeris = new RinexEphemerisReader.GpsEphemeris(ephemeris);
     }
 
     private void givenGalileoEphemeris(String ephemeris) {
-        itsGalileoEphemeris = new RinexEphemerisReader.GalileoEphemeris(ephemeris);
+        itsQuasiKeplerianEphemeris = new RinexEphemerisReader.GalileoEphemeris(ephemeris);
     }
 
     private void verifyModelAgainstGLabResults(String output) {
@@ -137,9 +136,9 @@ public class QuasiKeplerianSatelliteModelTest {
         double velocityY = parseDouble(record.substring(92, 106).trim());
         double velocityZ = parseDouble(record.substring(107, 121).trim());
         double correctionInMeters = parseDouble(record.substring(122, 136).trim());
-        double[] position = getPosition(satelliteSystem, year, dayOfYear, secondsOfDay);
-        double[] velocity = getVelocity(satelliteSystem, year, dayOfYear, secondsOfDay);
-        double correctionInSeconds = getCorrectionInSeconds(satelliteSystem, year, dayOfYear, secondsOfDay);
+        double[] position = getPosition(year, dayOfYear, secondsOfDay);
+        double[] velocity = getVelocity(year, dayOfYear, secondsOfDay);
+        double correctionInSeconds = getCorrectionInSeconds(year, dayOfYear, secondsOfDay);
         assertThat(position[0]).isWithin(5E-3).of(positionX);
         assertThat(position[1]).isWithin(5E-3).of(positionY);
         assertThat(position[2]).isWithin(5E-3).of(positionZ);
@@ -149,51 +148,27 @@ public class QuasiKeplerianSatelliteModelTest {
         assertThat(correctionInMeters).isWithin(5E-3).of(correctionInSeconds * 299792458);
     }
 
-    private double[] getPosition(String satelliteSystem, int year, int dayOfYear, int secondsOfDay) {
-        switch (satelliteSystem) {
-            case "GPS":
-                return itsGpsEphemeris.itsPositionModel.getPositionAt(getSecondsInReferenceEpoch("GPS",year, dayOfYear, secondsOfDay));
-            case "GAL":
-                return itsGalileoEphemeris.itsPositionModel.getPositionAt(getSecondsInReferenceEpoch("GAL",year, dayOfYear, secondsOfDay));
-        }
-        throw new UnsupportedOperationException("Unsupported satellite system: " + satelliteSystem);
+    private double[] getPosition(int year, int dayOfYear, int secondsOfDay) {
+        return itsQuasiKeplerianEphemeris.itsPositionModel.getPositionAt(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
     }
 
-    private double[] getVelocity(String satelliteSystem, int year, int dayOfYear, int secondsOfDay) {
-        switch (satelliteSystem) {
-            case "GPS":
-                return itsGpsEphemeris.itsVelocityModel.getVelocityAt(getSecondsInReferenceEpoch("GPS",year, dayOfYear, secondsOfDay));
-            case "GAL":
-                return itsGalileoEphemeris.itsVelocityModel.getVelocityAt(getSecondsInReferenceEpoch("GAL",year, dayOfYear, secondsOfDay));
-        }
-        throw new UnsupportedOperationException("Unsupported satellite system: " + satelliteSystem);
+    private double[] getVelocity(int year, int dayOfYear, int secondsOfDay) {
+        return itsQuasiKeplerianEphemeris.itsVelocityModel.getVelocityAt(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
     }
 
-    private double getCorrectionInSeconds(String satelliteSystem, int year, int dayOfYear, int secondsOfDay) {
-        switch (satelliteSystem) {
-            case "GPS":
-                return itsGpsEphemeris.itsPolynomialCorrection.getCorrectionInSeconds(getSecondsInReferenceEpoch("GPS",year, dayOfYear, secondsOfDay));
-            case "GAL":
-                return itsGalileoEphemeris.itsPolynomialCorrection.getCorrectionInSeconds(getSecondsInReferenceEpoch("GAL",year, dayOfYear, secondsOfDay));
-        }
-        throw new UnsupportedOperationException("Unsupported satellite system: " + satelliteSystem);
+    private double getCorrectionInSeconds(int year, int dayOfYear, int secondsOfDay) {
+        return itsQuasiKeplerianEphemeris.itsPolynomialCorrection.getCorrectionInSeconds(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
     }
 
-    private double getSecondsInReferenceEpoch(String satelliteSystem, int year, int dayOfYear, int secondsOfDay) {
+    private double getSecondsInReferenceEpoch(int year, int dayOfYear, int secondsOfDay) {
         LocalDateTime time = LocalDateTime.of(year, 1, 1, 0, 0, 0)
             .plusDays(dayOfYear - 1)
             .plusSeconds(secondsOfDay);
-        switch (satelliteSystem) {
-            case "GPS":
-                return itsGpsEphemeris.itsReferenceEpoch.until(time, ChronoUnit.SECONDS);
-            case "GAL":
-                return itsGalileoEphemeris.itsReferenceEpoch.until(time, ChronoUnit.SECONDS);
-        }
-        throw new UnsupportedOperationException("Unsupported satellite system: " + satelliteSystem);
+        return itsQuasiKeplerianEphemeris.itsReferenceEpoch.until(time, ChronoUnit.SECONDS);
     }
 
     @Before
     public void before() {
-        itsGpsEphemeris = null;
+        itsQuasiKeplerianEphemeris = null;
     }
 }
