@@ -197,7 +197,8 @@ public class QuasiKeplerianSatelliteModelTest {
     }
 
     private double[] getVelocity(int year, int dayOfYear, int secondsOfDay) {
-        return itsQuasiKeplerianEphemeris.itsVelocityModel.getVelocityAt(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
+        itsQuasiKeplerianEphemeris.itsVelocityModel.setSecondsSinceTheBeginningOfTheWeek(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
+        return itsQuasiKeplerianEphemeris.itsVelocityModel.getVelocityAt();
     }
 
     private double getCorrectionInSeconds(int year, int dayOfYear, int secondsOfDay) {
