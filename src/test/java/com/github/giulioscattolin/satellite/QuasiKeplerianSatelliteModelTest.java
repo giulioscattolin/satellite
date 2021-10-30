@@ -11,7 +11,7 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
 public class QuasiKeplerianSatelliteModelTest {
-    private RinexQuasiKeplerianEphemeris itsQuasiKeplerianEphemeris;
+    private RinexQuasiKeplerianEphemeris itsEphemeris;
 
     @Test
     public void verifyGpsSatelliteModel() {
@@ -151,15 +151,15 @@ public class QuasiKeplerianSatelliteModelTest {
     }
 
     private void givenRinexGpsEphemeris(String ephemeris) {
-        itsQuasiKeplerianEphemeris = new RinexGpsEphemeris(ephemeris);
+        itsEphemeris = new RinexGpsEphemeris(ephemeris);
     }
 
     private void givenRinexGalileoEphemeris(String ephemeris) {
-        itsQuasiKeplerianEphemeris = new RinexGalileoEphemeris(ephemeris);
+        itsEphemeris = new RinexGalileoEphemeris(ephemeris);
     }
 
     private void givenRinexBeidouEphemeris(String ephemeris) {
-        itsQuasiKeplerianEphemeris = new RinexBeidouEphemeris(ephemeris);
+        itsEphemeris = new RinexBeidouEphemeris(ephemeris);
     }
 
     private void verifyModelAgainstGLabResults(String output) {
@@ -179,42 +179,31 @@ public class QuasiKeplerianSatelliteModelTest {
         double velocityY = parseDouble(record.substring(92, 106).trim());
         double velocityZ = parseDouble(record.substring(107, 121).trim());
         double correctionInMeters = parseDouble(record.substring(122, 136).trim());
-        double[] position = getPosition(year, dayOfYear, secondsOfDay);
-        double[] velocity = getVelocity(year, dayOfYear, secondsOfDay);
-        double correctionInSeconds = getCorrectionInSeconds(year, dayOfYear, secondsOfDay);
-        assertThat(position[0]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(positionX);
-        assertThat(position[1]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(positionY);
-        assertThat(position[2]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(positionZ);
-        assertThat(velocity[0]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(velocityX);
-        assertThat(velocity[1]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(velocityY);
-        assertThat(velocity[2]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(velocityZ);
-        assertThat(correctionInMeters).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(correctionInSeconds * 299792458);
+        setSecondsSinceTheBeginningOfTheWeek(year, dayOfYear, secondsOfDay);
+        double[] position = itsEphemeris.itsPositionModel.getPosition();
+        double[] velocity = itsEphemeris.itsVelocityModel.getVelocity();
+        double correctionInSeconds = itsEphemeris.itsPolynomialCorrection.getCorrectionInSeconds();
+        assertThat(position[0]).isWithin(itsEphemeris.itsTolerance).of(positionX);
+        assertThat(position[1]).isWithin(itsEphemeris.itsTolerance).of(positionY);
+        assertThat(position[2]).isWithin(itsEphemeris.itsTolerance).of(positionZ);
+        assertThat(velocity[0]).isWithin(itsEphemeris.itsTolerance).of(velocityX);
+        assertThat(velocity[1]).isWithin(itsEphemeris.itsTolerance).of(velocityY);
+        assertThat(velocity[2]).isWithin(itsEphemeris.itsTolerance).of(velocityZ);
+        assertThat(correctionInMeters).isWithin(itsEphemeris.itsTolerance).of(correctionInSeconds * 299792458);
     }
 
-    private double[] getPosition(int year, int dayOfYear, int secondsOfDay) {
-        itsQuasiKeplerianEphemeris.itsPositionModel.setSecondsSinceTheBeginningOfTheWeek( getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
-        return itsQuasiKeplerianEphemeris.itsPositionModel.getPosition();
-    }
-
-    private double[] getVelocity(int year, int dayOfYear, int secondsOfDay) {
-        itsQuasiKeplerianEphemeris.itsVelocityModel.setSecondsSinceTheBeginningOfTheWeek(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
-        return itsQuasiKeplerianEphemeris.itsVelocityModel.getVelocityAt();
-    }
-
-    private double getCorrectionInSeconds(int year, int dayOfYear, int secondsOfDay) {
-        itsQuasiKeplerianEphemeris.itsPolynomialCorrection.setSecondsSinceTheBeginningOfTheWeek(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
-        return itsQuasiKeplerianEphemeris.itsPolynomialCorrection.getCorrectionInSeconds();
-    }
-
-    private double getSecondsInReferenceEpoch(int year, int dayOfYear, int secondsOfDay) {
+    private void setSecondsSinceTheBeginningOfTheWeek(int year, int dayOfYear, int secondsOfDay) {
         LocalDateTime time = LocalDateTime.of(year, 1, 1, 0, 0, 0)
             .plusDays(dayOfYear - 1)
             .plusSeconds(secondsOfDay);
-        return itsQuasiKeplerianEphemeris.itsReferenceEpoch.until(time, ChronoUnit.SECONDS);
+        double secondsSinceTheBeginningOfTheWeek = itsEphemeris.itsReferenceEpoch.until(time, ChronoUnit.SECONDS);
+        itsEphemeris.itsPositionModel.setSecondsSinceTheBeginningOfTheWeek(secondsSinceTheBeginningOfTheWeek);
+        itsEphemeris.itsVelocityModel.setSecondsSinceTheBeginningOfTheWeek(secondsSinceTheBeginningOfTheWeek);
+        itsEphemeris.itsPolynomialCorrection.setSecondsSinceTheBeginningOfTheWeek(secondsSinceTheBeginningOfTheWeek);
     }
 
     @Before
     public void before() {
-        itsQuasiKeplerianEphemeris = null;
+        itsEphemeris = null;
     }
 }
