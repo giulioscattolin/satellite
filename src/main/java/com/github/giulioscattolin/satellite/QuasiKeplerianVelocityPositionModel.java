@@ -12,7 +12,7 @@ public class QuasiKeplerianVelocityPositionModel {
         itsSecondsSinceTheBeginningOfTheWeek = newSecondsSinceTheBeginningOfTheWeek;
     }
 
-    public double[] getVelocityAt() {
+    public double[] getVelocity() {
         return new Algorithm().velocity;
     }
 
