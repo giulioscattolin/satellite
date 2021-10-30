@@ -11,11 +11,11 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
 public class QuasiKeplerianSatelliteModelTest {
-    private RinexEphemerisReader.RinexQuasiKeplerianEphemeris itsQuasiKeplerianEphemeris;
+    private RinexQuasiKeplerianEphemeris itsQuasiKeplerianEphemeris;
 
     @Test
     public void verifyGpsSatelliteModel() {
-        givenGpsEphemeris("" +
+        givenRinexGpsEphemeris("" +
             "G02 2021 05 10 00 00 00 -.602878164500D-03 -.318323145621D-11  .000000000000D+00\n" +
             "      .490000000000D+02 -.196250000000D+02  .423517641210D-08 -.245341177049D+01\n" +
             "     -.910833477974D-06  .201946522575D-01  .115446746349D-04  .515367399216D+04\n" +
@@ -77,7 +77,7 @@ public class QuasiKeplerianSatelliteModelTest {
 
     @Test
     public void verifyGalileoSatelliteModel() {
-        givenGalileoEphemeris("" +
+        givenRinexGalileoEphemeris("" +
             "E04 2020 01 11 22 20 00-4.435816081241e-04-7.617018127348e-12 0.000000000000e+00\n" +
             "     1.020000000000e+02 3.090625000000e+01 3.268350425628e-09-9.280353459515e-01\n" +
             "     1.389533281326e-06 6.746326107532e-05 1.017935574055e-05 5.440614864349e+03\n" +
@@ -111,12 +111,55 @@ public class QuasiKeplerianSatelliteModelTest {
             "SATPVT 2020 012   900.00 GAL  4 -12069323.6556  12292075.8156  24068421.0466     -1498.7554     -1892.0111       214.6755    -132998.176943");
     }
 
-    private void givenGpsEphemeris(String ephemeris) {
-        itsQuasiKeplerianEphemeris = new RinexEphemerisReader.GpsEphemeris(ephemeris);
+    @Test
+    public void verifyBeidouSatelliteModel() {
+        givenRinexBeidouEphemeris("" +
+            "C33 2020 01 11 22 00 00-7.730675861239e-04-4.389200114474e-11 0.000000000000e+00\n" +
+            "     1.000000000000e+00-4.440625000000e+01 3.499074321919e-09 1.738190524669e+00\n" +
+            "    -2.291519194841e-06 2.727791434154e-04 1.246482133865e-05 5.282628599167e+03\n" +
+            "     5.976000000000e+05-5.075708031654e-08 6.485823956258e-01-6.332993507385e-08\n" +
+            "     9.616943040965e-01 1.080468750000e+02-7.694687380901e-02-6.449554364113e-09\n" +
+            "     6.050252017282e-10 0.000000000000e+00 7.310000000000e+02 0.000000000000e+00\n" +
+            "     2.000000000000e+00 0.000000000000e+00-4.389999830323e-08-4.389999830323e-11\n" +
+            "     5.976000000000e+05 0.000000000000e+00");
+
+        verifyModelAgainstGLabResults("" +
+            "SATPVT 2020 011 79500.00 BDS 33 -15443583.3757   5020041.5300  22696493.8343     -1316.0488     -2234.1286      -400.0791    -231763.595173\n" +
+            "SATPVT 2020 011 79800.00 BDS 33 -15843850.6834   4355709.7762  22557776.0638     -1351.8475     -2194.0562      -524.5778    -231767.542720\n" +
+            "SATPVT 2020 011 80100.00 BDS 33 -16254349.4737   3704014.2022  22381833.9706     -1384.2224     -2149.9208      -648.2072    -231771.490267\n" +
+            "SATPVT 2020 011 80400.00 BDS 33 -16674020.6359   3066143.0562  22168958.9293     -1412.9625     -2101.9288      -770.7636    -231775.437814\n" +
+            "SATPVT 2020 011 80700.00 BDS 33 -17101743.7222   2443220.6359  21919503.1970     -1437.8702     -2050.3004      -892.0450    -231779.385362\n" +
+            "SATPVT 2020 011 81000.00 BDS 33 -17536341.1421   1836303.3849  21633879.3276     -1458.7621     -1995.2675     -1011.8514    -231783.332909\n" +
+            "SATPVT 2020 011 81300.00 BDS 33 -17976582.5887   1246376.2571  21312559.4873     -1475.4703     -1937.0745     -1129.9854    -231787.280456\n" +
+            "SATPVT 2020 011 81600.00 BDS 33 -18421189.6793    674349.3632  20956074.6725     -1487.8424     -1875.9759     -1246.2524    -231791.228004\n" +
+            "SATPVT 2020 011 81900.00 BDS 33 -18868840.7928    121054.9125  20565013.8312     -1495.7426     -1812.2364     -1360.4606    -231795.175551\n" +
+            "SATPVT 2020 011 82200.00 BDS 33 -19318176.0841   -412755.5392  20140022.8894     -1499.0519     -1746.1288     -1472.4220    -231799.123098\n" +
+            "SATPVT 2020 011 82500.00 BDS 33 -19767802.6575   -926413.5234  19681803.6846     -1497.6691     -1677.9338     -1581.9520    -231803.070645\n" +
+            "SATPVT 2020 011 82800.00 BDS 33 -20216299.8778  -1419335.7673  19191112.8074     -1491.5105     -1607.9389     -1688.8701    -231807.018193\n" +
+            "SATPVT 2020 011 83100.00 BDS 33 -20662224.7983  -1891025.9664  18668760.3531     -1480.5111     -1536.4361     -1793.0002    -231810.965740\n" +
+            "SATPVT 2020 011 83400.00 BDS 33 -21104117.6859  -2341076.2171  18115608.5866     -1464.6241     -1463.7221     -1894.1706    -231814.913287\n" +
+            "SATPVT 2020 011 83700.00 BDS 33 -21540507.6208  -2769168.1017  17532570.5204     -1443.8217     -1390.0971     -1992.2148    -231818.860834\n" +
+            "SATPVT 2020 011 84000.00 BDS 33 -21969918.1486  -3175073.4233  16920608.4104     -1418.0948     -1315.8622     -2086.9711    -231822.808382\n" +
+            "SATPVT 2020 011 84300.00 BDS 33 -22390872.9642  -3558654.5867  16280732.1705     -1387.4535     -1241.3198     -2178.2835    -231826.755929\n" +
+            "SATPVT 2020 011 84600.00 BDS 33 -22801901.6040  -3919864.6252  15613997.7090     -1351.9267     -1166.7716     -2266.0014    -231830.703476\n" +
+            "SATPVT 2020 011 84900.00 BDS 33 -23201545.1254  -4258746.8726  14921505.1891     -1311.5623     -1092.5176     -2349.9803    -231834.651024\n" +
+            "SATPVT 2020 011 85200.00 BDS 33 -23588361.7500  -4575434.2817  14204397.2175     -1266.4267     -1018.8552     -2430.0819    -231838.598571\n" +
+            "SATPVT 2020 011 85500.00 BDS 33 -23960932.4505  -4870148.3933  13463856.9623     -1216.6052      -946.0773     -2506.1741    -231842.546118\n" +
+            "SATPVT 2020 011 85800.00 BDS 33 -24317866.4575  -5143197.9578  12701106.2046     -1162.2008      -874.4724     -2578.1315    -231846.493665\n" +
+            "SATPVT 2020 011 86100.00 BDS 33 -24657806.6660  -5394977.2176  11917403.3267     -1103.3348      -804.3218     -2645.8357    -231850.441213\n" +
+            "SATPVT 2020 012     0.00 BDS 33 -24979434.9204  -5625963.8545  11114041.2395     -1040.1457      -735.8998     -2709.1750    -231854.388760");
     }
 
-    private void givenGalileoEphemeris(String ephemeris) {
-        itsQuasiKeplerianEphemeris = new RinexEphemerisReader.GalileoEphemeris(ephemeris);
+    private void givenRinexGpsEphemeris(String ephemeris) {
+        itsQuasiKeplerianEphemeris = new RinexGpsEphemeris(ephemeris);
+    }
+
+    private void givenRinexGalileoEphemeris(String ephemeris) {
+        itsQuasiKeplerianEphemeris = new RinexGalileoEphemeris(ephemeris);
+    }
+
+    private void givenRinexBeidouEphemeris(String ephemeris) {
+        itsQuasiKeplerianEphemeris = new RinexBeidouEphemeris(ephemeris);
     }
 
     private void verifyModelAgainstGLabResults(String output) {
@@ -139,13 +182,13 @@ public class QuasiKeplerianSatelliteModelTest {
         double[] position = getPosition(year, dayOfYear, secondsOfDay);
         double[] velocity = getVelocity(year, dayOfYear, secondsOfDay);
         double correctionInSeconds = getCorrectionInSeconds(year, dayOfYear, secondsOfDay);
-        assertThat(position[0]).isWithin(5E-3).of(positionX);
-        assertThat(position[1]).isWithin(5E-3).of(positionY);
-        assertThat(position[2]).isWithin(5E-3).of(positionZ);
-        assertThat(velocity[0]).isWithin(5E-3).of(velocityX);
-        assertThat(velocity[1]).isWithin(5E-3).of(velocityY);
-        assertThat(velocity[2]).isWithin(5E-3).of(velocityZ);
-        assertThat(correctionInMeters).isWithin(5E-3).of(correctionInSeconds * 299792458);
+        assertThat(position[0]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(positionX);
+        assertThat(position[1]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(positionY);
+        assertThat(position[2]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(positionZ);
+        assertThat(velocity[0]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(velocityX);
+        assertThat(velocity[1]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(velocityY);
+        assertThat(velocity[2]).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(velocityZ);
+        assertThat(correctionInMeters).isWithin(itsQuasiKeplerianEphemeris.itsTolerance).of(correctionInSeconds * 299792458);
     }
 
     private double[] getPosition(int year, int dayOfYear, int secondsOfDay) {
