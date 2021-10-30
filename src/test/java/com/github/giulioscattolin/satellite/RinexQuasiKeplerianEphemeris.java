@@ -7,7 +7,7 @@ import static java.lang.Integer.parseInt;
 
 public abstract class RinexQuasiKeplerianEphemeris {
     public QuasiKeplerianSatellitePositionModel itsPositionModel = new QuasiKeplerianSatellitePositionModel();
-    public QuasiKeplerianVelocityPositionModel itsVelocityModel = new QuasiKeplerianVelocityPositionModel();
+    public QuasiKeplerianSatelliteVelocityModel itsVelocityModel = new QuasiKeplerianSatelliteVelocityModel();
     public PolynomialSatelliteClockCorrection itsPolynomialCorrection = new PolynomialSatelliteClockCorrection();
     public LocalDateTime itsReferenceEpoch;
     public double itsTolerance;
