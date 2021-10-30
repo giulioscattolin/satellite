@@ -35,12 +35,12 @@ public class RinexEphemerisReader {
         }
 
         private void readLines(String[] lines) {
-            readSvEpochSvClk(getFields(lines[0]));
-            readBroadcastOrbit1(getFields(lines[1]));
-            readBroadcastOrbit2(getFields(lines[2]));
-            readBroadcastOrbit3(getFields(lines[3]));
-            readBroadcastOrbit4(getFields(lines[4]));
-            readBroadcastOrbit5(getFields(lines[5]));
+            readSvEpochSvClk(lines[0]);
+            readBroadcastOrbit1(lines[1]);
+            readBroadcastOrbit2(lines[2]);
+            readBroadcastOrbit3(lines[3]);
+            readBroadcastOrbit4(lines[4]);
+            readBroadcastOrbit5(lines[5]);
             itsReferenceEpoch = getReferenceEpoch();
             itsPolynomialCorrection.itsSatelliteClockEpoch = getSatelliteClockEpoch();
         }
@@ -54,48 +54,48 @@ public class RinexEphemerisReader {
             return itsReferenceEpoch.until(toc, ChronoUnit.SECONDS);
         }
 
-        private void readSvEpochSvClk(String[] fields) {
-            itsYear = parseInt(fields[1]);
-            itsMonth = parseInt(fields[2]);
-            itsDay = parseInt(fields[3]);
-            itsHour = parseInt(fields[4]);
-            itsMinute = parseInt(fields[5]);
-            itsSecond = parseInt(fields[6]);
-            itsPolynomialCorrection.itsClockBias = parseDouble(fields[7]);
-            itsPolynomialCorrection.itsClockDrift = parseDouble(fields[8]);
-            itsPolynomialCorrection.itsClockDriftRate = parseDouble(fields[9]);
+        private void readSvEpochSvClk(String line) {
+            itsYear = parseInt(line.substring(4, 8));
+            itsMonth = parseInt(line.substring(9, 11));
+            itsDay = parseInt(line.substring(12, 14));
+            itsHour = parseInt(line.substring(15, 17));
+            itsMinute = parseInt(line.substring(18, 20));
+            itsSecond = parseInt(line.substring(21, 23));
+            itsPolynomialCorrection.itsClockBias = parseDouble(line.substring(23, 42));
+            itsPolynomialCorrection.itsClockDrift = parseDouble(line.substring(42, 61));
+            itsPolynomialCorrection.itsClockDriftRate = parseDouble(line.substring(61, 80));
         }
 
-        private void readBroadcastOrbit1(String[] fields) {
-            itsPositionModel.itsCrs = parseDouble(fields[1]);
-            itsPositionModel.itsDeltaN = parseDouble(fields[2]);
-            itsPositionModel.itsM0 = parseDouble(fields[3]);
+        private void readBroadcastOrbit1(String line) {
+            itsPositionModel.itsCrs = parseDouble(line.substring(23, 42));
+            itsPositionModel.itsDeltaN = parseDouble(line.substring(42, 61));
+            itsPositionModel.itsM0 = parseDouble(line.substring(61, 80));
         }
 
-        private void readBroadcastOrbit2(String[] fields) {
-            itsPositionModel.itsCuc = parseDouble(fields[0]);
-            itsPositionModel.itsE = parseDouble(fields[1]);
-            itsPositionModel.itsCus = parseDouble(fields[2]);
-            itsPositionModel.itsSqrtA = parseDouble(fields[3]);
+        private void readBroadcastOrbit2(String line) {
+            itsPositionModel.itsCuc = parseDouble(line.substring(4, 23));
+            itsPositionModel.itsE = parseDouble(line.substring(23, 42));
+            itsPositionModel.itsCus = parseDouble(line.substring(42, 61));
+            itsPositionModel.itsSqrtA = parseDouble(line.substring(61, 80));
         }
 
-        private void readBroadcastOrbit3(String[] fields) {
-            itsPositionModel.itsSecondsSinceReferenceEpoch = parseDouble(fields[0]);
-            itsPositionModel.itsCic = parseDouble(fields[1]);
-            itsPositionModel.itsOmega0 = parseDouble(fields[2]);
-            itsPositionModel.itsCis = parseDouble(fields[3]);
+        private void readBroadcastOrbit3(String line) {
+            itsPositionModel.itsSecondsSinceReferenceEpoch = parseDouble(line.substring(4, 23));
+            itsPositionModel.itsCic = parseDouble(line.substring(23, 42));
+            itsPositionModel.itsOmega0 = parseDouble(line.substring(42, 61));
+            itsPositionModel.itsCis = parseDouble(line.substring(61, 80));
         }
 
-        private void readBroadcastOrbit4(String[] fields) {
-            itsPositionModel.itsI0 = parseDouble(fields[0]);
-            itsPositionModel.itsCrc = parseDouble(fields[1]);
-            itsPositionModel.itsOmega = parseDouble(fields[2]);
-            itsPositionModel.itsOmegaDot = parseDouble(fields[3]);
+        private void readBroadcastOrbit4(String line) {
+            itsPositionModel.itsI0 = parseDouble(line.substring(4, 23));
+            itsPositionModel.itsCrc = parseDouble(line.substring(23, 42));
+            itsPositionModel.itsOmega = parseDouble(line.substring(42, 61));
+            itsPositionModel.itsOmegaDot = parseDouble(line.substring(61, 80));
         }
 
-        private void readBroadcastOrbit5(String[] fields) {
-            itsPositionModel.itsIDot = parseDouble(fields[0]);
-            itsWeekNumber = (long) parseDouble(fields[2]);
+        private void readBroadcastOrbit5(String line) {
+            itsPositionModel.itsIDot = parseDouble(line.substring(4, 23));
+            itsWeekNumber = (long) parseDouble(line.substring(42, 61));
         }
     }
 }
