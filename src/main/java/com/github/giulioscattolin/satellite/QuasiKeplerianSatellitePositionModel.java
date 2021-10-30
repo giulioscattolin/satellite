@@ -21,9 +21,10 @@ public class QuasiKeplerianSatellitePositionModel {
     public double itsIDot;
     public double itsMu;
     public double itsToeInSecondsSinceTheBeginningOfTheWeek;
+    public double itsSecondsSinceTheBeginningOfTheWeek;
 
-    public double[] getPositionAt(double secondsSinceTheBeginningOfTheWeek) {
-        return new Algorithm(secondsSinceTheBeginningOfTheWeek).position;
+    public double[] getPosition() {
+        return new Algorithm().position;
     }
 
     class Algorithm {
@@ -47,8 +48,8 @@ public class QuasiKeplerianSatellitePositionModel {
         final double zk;
         final double[] position;
 
-        Algorithm(double secondsSinceTheBeginningOfTheWeek) {
-            tk = getTk(secondsSinceTheBeginningOfTheWeek);
+        Algorithm() {
+            tk = getTk();
             A = getA();
             N0 = getN0();
             n = getN();
@@ -72,8 +73,8 @@ public class QuasiKeplerianSatellitePositionModel {
         /**
          * Returns the seconds since the ephemeris reference epoch.
          */
-        double getTk(double secondsSinceTheBeginningOfTheWeek) {
-            double tk = secondsSinceTheBeginningOfTheWeek - itsToeInSecondsSinceTheBeginningOfTheWeek;
+        double getTk() {
+            double tk = itsSecondsSinceTheBeginningOfTheWeek - itsToeInSecondsSinceTheBeginningOfTheWeek;
             if (tk > 302400)
                 return tk - 604800;
             if (tk < -302400)

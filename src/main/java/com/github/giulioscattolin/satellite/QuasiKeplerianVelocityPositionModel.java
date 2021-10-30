@@ -12,8 +12,10 @@ public class QuasiKeplerianVelocityPositionModel {
 
         Algorithm(double secondsSinceTheBeginningOfTheWeek) {
             double dt = 1E-4;
-            double[] p = itsPositionModel.getPositionAt(secondsSinceTheBeginningOfTheWeek);
-            double[] q = itsPositionModel.getPositionAt(secondsSinceTheBeginningOfTheWeek + dt);
+            itsPositionModel.itsSecondsSinceTheBeginningOfTheWeek = secondsSinceTheBeginningOfTheWeek;
+            double[] p = itsPositionModel.getPosition();
+            itsPositionModel.itsSecondsSinceTheBeginningOfTheWeek += dt;
+            double[] q = itsPositionModel.getPosition();
             double xk = (q[0] - p[0]) / dt;
             double yk = (q[1] - p[1]) / dt;
             double zk = (q[2] - p[2]) / dt;
