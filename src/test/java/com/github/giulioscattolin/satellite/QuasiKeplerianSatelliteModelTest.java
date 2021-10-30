@@ -11,7 +11,8 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
 public class QuasiKeplerianSatelliteModelTest {
-    private RinexEphemerisReader.GpsEphemeris itsGpsEphemeris;
+    private RinexEphemerisReader.RinexQuasiKeplerianEphemeris itsGpsEphemeris;
+    private RinexEphemerisReader.RinexQuasiKeplerianEphemeris itsGalileoEphemeris;
 
     @Test
     public void verifyGpsSatelliteModel() {
@@ -75,8 +76,48 @@ public class QuasiKeplerianSatelliteModelTest {
             "SATPVT 2021 130  6900.00 GPS  2  22174910.2257 -14220955.8161  -2924190.6237      -193.9370       490.5469     -3149.3612    -180744.911541");
     }
 
+    @Test
+    public void verifyGalileoSatelliteModel() {
+        givenGalileoEphemeris("" +
+            "E04 2020 01 11 22 20 00-4.435816081241e-04-7.617018127348e-12 0.000000000000e+00\n" +
+            "     1.020000000000e+02 3.090625000000e+01 3.268350425628e-09-9.280353459515e-01\n" +
+            "     1.389533281326e-06 6.746326107532e-05 1.017935574055e-05 5.440614864349e+03\n" +
+            "     5.988000000000e+05-7.450580596924e-08 1.085935183548e+00 6.332993507385e-08\n" +
+            "     9.531954083691e-01 1.184375000000e+02 1.571593639092e+00-5.483085535378e-09\n" +
+            "     8.886084426799e-10 0.000000000000e+00 2.087000000000e+03 0.000000000000e+00\n" +
+            "     3.120000000000e+00 0.000000000000e+00-5.355104804039e-09-6.053596735001e-09\n" +
+            "     5.994640000000e+05   ");
+
+        verifyModelAgainstGLabResults("" +
+            "SATPVT 2020 011 81300.00 GAL  4  -6443052.7023  23687366.8104  16537660.0458      -359.8232     -1619.2557      2178.7455    -132984.475795\n" +
+            "SATPVT 2020 011 81600.00 GAL  4  -6558814.6329  23193423.1539  17179693.8758      -412.2572     -1673.0711      2100.9868    -132985.160853\n" +
+            "SATPVT 2020 011 81900.00 GAL  4  -6690596.8289  22683909.1575  17797961.3756      -466.5889     -1723.0364      2020.3217    -132985.845910\n" +
+            "SATPVT 2020 011 82200.00 GAL  4  -6838935.7587  22159998.7204  18391607.2989      -522.5979     -1769.0279      1936.8619    -132986.530967\n" +
+            "SATPVT 2020 011 82500.00 GAL  4  -7004300.7767  21622900.7761  18959810.4697      -580.0577     -1810.9358      1850.7229    -132987.216025\n" +
+            "SATPVT 2020 011 82800.00 GAL  4  -7187092.2549  21073855.2186  19501784.9171      -638.7353     -1848.6638      1762.0239    -132987.901082\n" +
+            "SATPVT 2020 011 83100.00 GAL  4  -7387639.9571  20514128.7250  20016780.9615      -698.3926     -1882.1296      1670.8876    -132988.586140\n" +
+            "SATPVT 2020 011 83400.00 GAL  4  -7606201.6617  19945010.4882  20504086.2507      -758.7880     -1911.2654      1577.4401    -132989.271197\n" +
+            "SATPVT 2020 011 83700.00 GAL  4  -7842962.0377  19367807.8745  20963026.7433      -819.6759     -1936.0178      1481.8108    -132989.956254\n" +
+            "SATPVT 2020 011 84000.00 GAL  4  -8098031.7789  18783842.0211  21392967.6402      -880.8089     -1956.3485      1384.1318    -132990.641312\n" +
+            "SATPVT 2020 011 84300.00 GAL  4  -8371446.9979  18194443.3901  21793314.2613      -941.9375     -1972.2336      1284.5383    -132991.326369\n" +
+            "SATPVT 2020 011 84600.00 GAL  4  -8663168.8830  17600947.2925  22163512.8661     -1002.8117     -1983.6647      1183.1682    -132992.011426\n" +
+            "SATPVT 2020 011 84900.00 GAL  4  -8973083.6192  17004689.3990  22503051.4188     -1063.1815     -1990.6479      1080.1616    -132992.696484\n" +
+            "SATPVT 2020 011 85200.00 GAL  4  -9301002.5730  16407001.2531  22811460.2944     -1122.7984     -1993.2045       975.6609    -132993.381541\n" +
+            "SATPVT 2020 011 85500.00 GAL  4  -9646662.7411  15809205.8022  23088312.9276     -1181.4155     -1991.3706       869.8109    -132994.066599\n" +
+            "SATPVT 2020 011 85800.00 GAL  4 -10009727.4613  15212612.9614  23333226.4009     -1238.7884     -1985.1968       762.7578    -132994.751656\n" +
+            "SATPVT 2020 011 86100.00 GAL  4 -10389787.3825  14618515.2264  23545861.9731     -1294.6771     -1974.7486       654.6497    -132995.436713\n" +
+            "SATPVT 2020 012     0.00 GAL  4 -10786361.6913  14028183.3506  23725925.5470     -1348.8454     -1960.1055       545.6361    -132996.121771\n" +
+            "SATPVT 2020 012   300.00 GAL  4 -11198899.5913  13442862.1004  23873168.0747     -1401.0630     -1941.3612       435.8679    -132996.806828\n" +
+            "SATPVT 2020 012   600.00 GAL  4 -11626782.0279  12863766.1054  23987385.9014     -1451.1055     -1918.6229       325.4968    -132997.491885\n" +
+            "SATPVT 2020 012   900.00 GAL  4 -12069323.6556  12292075.8156  24068421.0466     -1498.7554     -1892.0111       214.6755    -132998.176943");
+    }
+
     private void givenGpsEphemeris(String ephemeris) {
         itsGpsEphemeris = new RinexEphemerisReader.GpsEphemeris(ephemeris);
+    }
+
+    private void givenGalileoEphemeris(String ephemeris) {
+        itsGalileoEphemeris = new RinexEphemerisReader.GalileoEphemeris(ephemeris);
     }
 
     private void verifyModelAgainstGLabResults(String output) {
@@ -99,19 +140,21 @@ public class QuasiKeplerianSatelliteModelTest {
         double[] position = getPosition(satelliteSystem, year, dayOfYear, secondsOfDay);
         double[] velocity = getVelocity(satelliteSystem, year, dayOfYear, secondsOfDay);
         double correctionInSeconds = getCorrectionInSeconds(satelliteSystem, year, dayOfYear, secondsOfDay);
-        assertThat(position[0]).isWithin(1E-3).of(positionX);
-        assertThat(position[1]).isWithin(1E-3).of(positionY);
-        assertThat(position[2]).isWithin(1E-3).of(positionZ);
-        assertThat(velocity[0]).isWithin(1E-3).of(velocityX);
-        assertThat(velocity[1]).isWithin(1E-3).of(velocityY);
-        assertThat(velocity[2]).isWithin(1E-3).of(velocityZ);
-        assertThat(correctionInMeters).isWithin(1E-3).of(correctionInSeconds * 299792458);
+        assertThat(position[0]).isWithin(5E-3).of(positionX);
+        assertThat(position[1]).isWithin(5E-3).of(positionY);
+        assertThat(position[2]).isWithin(5E-3).of(positionZ);
+        assertThat(velocity[0]).isWithin(5E-3).of(velocityX);
+        assertThat(velocity[1]).isWithin(5E-3).of(velocityY);
+        assertThat(velocity[2]).isWithin(5E-3).of(velocityZ);
+        assertThat(correctionInMeters).isWithin(5E-3).of(correctionInSeconds * 299792458);
     }
 
     private double[] getPosition(String satelliteSystem, int year, int dayOfYear, int secondsOfDay) {
         switch (satelliteSystem) {
             case "GPS":
-                return itsGpsEphemeris.itsPositionModel.getPositionAt(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
+                return itsGpsEphemeris.itsPositionModel.getPositionAt(getSecondsInReferenceEpoch("GPS",year, dayOfYear, secondsOfDay));
+            case "GAL":
+                return itsGalileoEphemeris.itsPositionModel.getPositionAt(getSecondsInReferenceEpoch("GAL",year, dayOfYear, secondsOfDay));
         }
         throw new UnsupportedOperationException("Unsupported satellite system: " + satelliteSystem);
     }
@@ -119,7 +162,9 @@ public class QuasiKeplerianSatelliteModelTest {
     private double[] getVelocity(String satelliteSystem, int year, int dayOfYear, int secondsOfDay) {
         switch (satelliteSystem) {
             case "GPS":
-                return itsGpsEphemeris.itsVelocityModel.getVelocityAt(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
+                return itsGpsEphemeris.itsVelocityModel.getVelocityAt(getSecondsInReferenceEpoch("GPS",year, dayOfYear, secondsOfDay));
+            case "GAL":
+                return itsGalileoEphemeris.itsVelocityModel.getVelocityAt(getSecondsInReferenceEpoch("GAL",year, dayOfYear, secondsOfDay));
         }
         throw new UnsupportedOperationException("Unsupported satellite system: " + satelliteSystem);
     }
@@ -127,16 +172,24 @@ public class QuasiKeplerianSatelliteModelTest {
     private double getCorrectionInSeconds(String satelliteSystem, int year, int dayOfYear, int secondsOfDay) {
         switch (satelliteSystem) {
             case "GPS":
-                return itsGpsEphemeris.itsPolynomialCorrection.getCorrectionInSeconds(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
+                return itsGpsEphemeris.itsPolynomialCorrection.getCorrectionInSeconds(getSecondsInReferenceEpoch("GPS",year, dayOfYear, secondsOfDay));
+            case "GAL":
+                return itsGalileoEphemeris.itsPolynomialCorrection.getCorrectionInSeconds(getSecondsInReferenceEpoch("GAL",year, dayOfYear, secondsOfDay));
         }
         throw new UnsupportedOperationException("Unsupported satellite system: " + satelliteSystem);
     }
 
-    private double getSecondsInReferenceEpoch(int year, int dayOfYear, int secondsOfDay) {
+    private double getSecondsInReferenceEpoch(String satelliteSystem, int year, int dayOfYear, int secondsOfDay) {
         LocalDateTime time = LocalDateTime.of(year, 1, 1, 0, 0, 0)
             .plusDays(dayOfYear - 1)
             .plusSeconds(secondsOfDay);
-        return itsGpsEphemeris.itsReferenceEpoch.until(time, ChronoUnit.SECONDS);
+        switch (satelliteSystem) {
+            case "GPS":
+                return itsGpsEphemeris.itsReferenceEpoch.until(time, ChronoUnit.SECONDS);
+            case "GAL":
+                return itsGalileoEphemeris.itsReferenceEpoch.until(time, ChronoUnit.SECONDS);
+        }
+        throw new UnsupportedOperationException("Unsupported satellite system: " + satelliteSystem);
     }
 
     @Before

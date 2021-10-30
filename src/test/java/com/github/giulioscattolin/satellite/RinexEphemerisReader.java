@@ -11,7 +11,7 @@ public class RinexEphemerisReader {
     }
 
     public static class GpsEphemeris extends RinexQuasiKeplerianEphemeris {
-        public static final LocalDateTime GPS_EPOCH = LocalDateTime.of(1980, 1, 6, 0, 0, 0);
+        public static final LocalDateTime EPOCH = LocalDateTime.of(1980, 1, 6, 0, 0, 0);
 
         public GpsEphemeris(String ephemeris) {
             super(ephemeris);
@@ -19,7 +19,18 @@ public class RinexEphemerisReader {
         }
 
         protected LocalDateTime getReferenceEpoch() {
-            return GPS_EPOCH.plusDays(7 * itsWeekNumber);
+            return EPOCH.plusDays(7 * itsWeekNumber);
+        }
+    }
+
+    public static class GalileoEphemeris extends RinexQuasiKeplerianEphemeris {
+        public GalileoEphemeris(String ephemeris) {
+            super(ephemeris);
+            itsPositionModel.itsMu = 3.986004418E14;
+        }
+
+        protected LocalDateTime getReferenceEpoch() {
+            return GpsEphemeris.EPOCH.plusDays(7 * itsWeekNumber);
         }
     }
 
