@@ -20,10 +20,10 @@ public class QuasiKeplerianSatellitePositionModel {
     public double itsOmegaDot;
     public double itsIDot;
     public double itsMu;
-    public double itsSecondsSinceReferenceEpoch;
+    public double itsToeInSecondsSinceTheBeginningOfTheWeek;
 
-    public double[] getPositionAt(double secondsSinceReferenceEpoch) {
-        return new Algorithm(secondsSinceReferenceEpoch).position;
+    public double[] getPositionAt(double secondsSinceTheBeginningOfTheWeek) {
+        return new Algorithm(secondsSinceTheBeginningOfTheWeek).position;
     }
 
     class Algorithm {
@@ -47,8 +47,8 @@ public class QuasiKeplerianSatellitePositionModel {
         final double zk;
         final double[] position;
 
-        Algorithm(double secondsSinceReferenceEpoch) {
-            tk = getTk(secondsSinceReferenceEpoch);
+        Algorithm(double secondsSinceTheBeginningOfTheWeek) {
+            tk = getTk(secondsSinceTheBeginningOfTheWeek);
             A = getA();
             N0 = getN0();
             n = getN();
@@ -70,10 +70,10 @@ public class QuasiKeplerianSatellitePositionModel {
         }
 
         /**
-         * Returns the seconds since the ephemeris reference epoch frame.
+         * Returns the seconds since the ephemeris reference epoch.
          */
-        double getTk(double secondsSinceReferenceEpoch) {
-            double tk = secondsSinceReferenceEpoch - itsSecondsSinceReferenceEpoch;
+        double getTk(double secondsSinceTheBeginningOfTheWeek) {
+            double tk = secondsSinceTheBeginningOfTheWeek - itsToeInSecondsSinceTheBeginningOfTheWeek;
             if (tk > 302400)
                 return tk - 604800;
             if (tk < -302400)
@@ -129,7 +129,7 @@ public class QuasiKeplerianSatellitePositionModel {
         }
 
         double getLongitudeOfAscendingNode() {
-            return itsOmega0 + omegadotk * tk - OMEGA_E_DOT * itsSecondsSinceReferenceEpoch;
+            return itsOmega0 + omegadotk * tk - OMEGA_E_DOT * itsToeInSecondsSinceTheBeginningOfTheWeek;
         }
 
         double getInPlaneXPosition() {

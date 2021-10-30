@@ -1,5 +1,6 @@
 package com.github.giulioscattolin.satellite;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -11,7 +12,7 @@ public abstract class RinexQuasiKeplerianEphemeris {
     public PolynomialSatelliteClockCorrection itsPolynomialCorrection = new PolynomialSatelliteClockCorrection();
     public LocalDateTime itsReferenceEpoch;
     public double itsTolerance;
-    protected long itsWeekNumber;
+    private long itsWeekNumber;
     private int itsYear;
     private int itsMonth;
     private int itsDay;
@@ -37,12 +38,16 @@ public abstract class RinexQuasiKeplerianEphemeris {
         readBroadcastOrbit4(lines[4]);
         readBroadcastOrbit5(lines[5]);
         itsReferenceEpoch = getReferenceEpoch();
-        itsPolynomialCorrection.itsSatelliteClockEpoch = getSatelliteClockEpoch();
+        itsPolynomialCorrection.itsTocInSecondsSinceTheBeginningOfTheWeek = getTocInSecondsSinceTheBeginningOfTheWeek();
     }
 
-    protected abstract LocalDateTime getReferenceEpoch();
+    private LocalDateTime getReferenceEpoch() {
+        return getEpoch().plusDays(7 * itsWeekNumber);
+    }
 
-    private double getSatelliteClockEpoch() {
+    protected abstract LocalDateTime getEpoch();
+
+    private double getTocInSecondsSinceTheBeginningOfTheWeek() {
         LocalDateTime toc = LocalDateTime.of(itsYear, itsMonth, itsDay, itsHour, itsMinute, itsSecond);
         return itsReferenceEpoch.until(toc, ChronoUnit.SECONDS);
     }
@@ -73,7 +78,7 @@ public abstract class RinexQuasiKeplerianEphemeris {
     }
 
     private void readBroadcastOrbit3(String line) {
-        itsPositionModel.itsSecondsSinceReferenceEpoch = parseDouble(line.substring(4, 23));
+        itsPositionModel.itsToeInSecondsSinceTheBeginningOfTheWeek = parseDouble(line.substring(4, 23));
         itsPositionModel.itsCic = parseDouble(line.substring(23, 42));
         itsPositionModel.itsOmega0 = parseDouble(line.substring(42, 61));
         itsPositionModel.itsCis = parseDouble(line.substring(61, 80));

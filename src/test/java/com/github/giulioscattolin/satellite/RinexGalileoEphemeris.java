@@ -9,7 +9,7 @@ public class RinexGalileoEphemeris extends RinexQuasiKeplerianEphemeris {
         itsTolerance = 1E-2;
     }
 
-    protected LocalDateTime getReferenceEpoch() {
-        return RinexGpsEphemeris.EPOCH.plusDays(7 * itsWeekNumber);
+    protected LocalDateTime getEpoch() {
+        return LocalDateTime.of(1980, 1, 6, 0, 0, 0);
     }
 }
