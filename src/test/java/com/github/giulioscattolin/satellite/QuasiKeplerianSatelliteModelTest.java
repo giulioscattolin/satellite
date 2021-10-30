@@ -202,7 +202,8 @@ public class QuasiKeplerianSatelliteModelTest {
     }
 
     private double getCorrectionInSeconds(int year, int dayOfYear, int secondsOfDay) {
-        return itsQuasiKeplerianEphemeris.itsPolynomialCorrection.getCorrectionInSeconds(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
+        itsQuasiKeplerianEphemeris.itsPolynomialCorrection.setSecondsSinceTheBeginningOfTheWeek(getSecondsInReferenceEpoch(year, dayOfYear, secondsOfDay));
+        return itsQuasiKeplerianEphemeris.itsPolynomialCorrection.getCorrectionInSeconds();
     }
 
     private double getSecondsInReferenceEpoch(int year, int dayOfYear, int secondsOfDay) {

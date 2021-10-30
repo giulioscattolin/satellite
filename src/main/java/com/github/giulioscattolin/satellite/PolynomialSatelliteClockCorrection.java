@@ -5,6 +5,15 @@ public class PolynomialSatelliteClockCorrection {
     private double itsClockDrift;
     private double itsClockDriftRate;
     private double itsTocInSecondsSinceTheBeginningOfTheWeek;
+    private double itsSecondsSinceTheBeginningOfTheWeek;
+
+    public double getSecondsSinceTheBeginningOfTheWeek() {
+        return itsSecondsSinceTheBeginningOfTheWeek;
+    }
+
+    public void setSecondsSinceTheBeginningOfTheWeek(double itsSecondsSinceTheBeginningOfTheWeek) {
+        this.itsSecondsSinceTheBeginningOfTheWeek = itsSecondsSinceTheBeginningOfTheWeek;
+    }
 
     public double getClockBias() {
         return itsClockBias;
@@ -38,8 +47,8 @@ public class PolynomialSatelliteClockCorrection {
         this.itsTocInSecondsSinceTheBeginningOfTheWeek = itsTocInSecondsSinceTheBeginningOfTheWeek;
     }
 
-    public double getCorrectionInSeconds(double secondsSinceTheBeginningOfTheWeek) {
-        double dt = secondsSinceTheBeginningOfTheWeek - itsTocInSecondsSinceTheBeginningOfTheWeek;
+    public double getCorrectionInSeconds() {
+        double dt = itsSecondsSinceTheBeginningOfTheWeek - itsTocInSecondsSinceTheBeginningOfTheWeek;
         if (dt > 302400)
             dt -= 604800;
         if (dt < -302400)
