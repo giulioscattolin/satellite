@@ -6,21 +6,29 @@ import java.time.temporal.ChronoUnit;
 import static java.lang.Integer.parseInt;
 
 public class RinexEphemerisReader {
-    private static String[] getFields(String line) {
-        return line.trim().split(" +");
-    }
-
     private static double parseDouble(String field) {
         return Double.parseDouble(field.replace('D', 'E'));
     }
 
-    public static class GpsEphemeris {
+    public static class GpsEphemeris extends RinexQuasiKeplerianEphemeris {
         public static final LocalDateTime GPS_EPOCH = LocalDateTime.of(1980, 1, 6, 0, 0, 0);
+
+        public GpsEphemeris(String ephemeris) {
+            super(ephemeris);
+            itsPositionModel.itsMu = 3.986005E14;
+        }
+
+        protected LocalDateTime getReferenceEpoch() {
+            return GPS_EPOCH.plusDays(7 * itsWeekNumber);
+        }
+    }
+
+    public static abstract class RinexQuasiKeplerianEphemeris {
         public QuasiKeplerianSatellitePositionModel itsPositionModel = new QuasiKeplerianSatellitePositionModel();
         public QuasiKeplerianVelocityPositionModel itsVelocityModel = new QuasiKeplerianVelocityPositionModel();
         public PolynomialSatelliteClockCorrection itsPolynomialCorrection = new PolynomialSatelliteClockCorrection();
         public LocalDateTime itsReferenceEpoch;
-        private long itsWeekNumber;
+        protected long itsWeekNumber;
         private int itsYear;
         private int itsMonth;
         private int itsDay;
@@ -28,7 +36,7 @@ public class RinexEphemerisReader {
         private int itsMinute;
         private int itsSecond;
 
-        public GpsEphemeris(String ephemeris) {
+        public RinexQuasiKeplerianEphemeris(String ephemeris) {
             readLines(ephemeris.split("\n"));
             itsPositionModel.itsMu = 3.986005E14;
             itsVelocityModel.itsPositionModel = itsPositionModel;
@@ -45,9 +53,7 @@ public class RinexEphemerisReader {
             itsPolynomialCorrection.itsSatelliteClockEpoch = getSatelliteClockEpoch();
         }
 
-        private LocalDateTime getReferenceEpoch() {
-            return GPS_EPOCH.plusDays(7 * itsWeekNumber);
-        }
+        protected abstract LocalDateTime getReferenceEpoch();
 
         private double getSatelliteClockEpoch() {
             LocalDateTime toc = LocalDateTime.of(itsYear, itsMonth, itsDay, itsHour, itsMinute, itsSecond);
